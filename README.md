@@ -101,6 +101,7 @@ Findings: The spawned powershell.exe process executed system enumeration command
 
 ## Remediation & Response PlaybookEndpoint Isolation: 
 1-Immediately isolate Client2.BCS.local from the network to sever external C2 channels.
+
 2- Persistence Removal: Delete the malicious scheduled task using:
 DOS
 ```
@@ -108,5 +109,7 @@ schtasks /delete /tn "Updater" /f
 ```
 
 3-Network Containment: Block target C2 IP 3.140.33.120 and associated egress ports (9001, 9003) on border firewalls/web proxies.
+
 4- Credential Revocation: Reset credentials and force session termination for user BCS\alice.
+
 5-Attack Surface Reduction: Restrict mshta.exe and powershell.exe execution policies using AppLocker or Windows Defender Application Control (WDAC).
