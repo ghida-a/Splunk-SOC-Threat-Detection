@@ -81,7 +81,24 @@ index=* EventCode=1 (CommandLine="*whoami*" OR CommandLine="*systeminfo*" OR Com
 
 Findings: The spawned powershell.exe process executed system enumeration commands including whoami /groups, whoami /user, and systeminfo.exe.MITRE ATT&CK Mapping:T1033 - System Owner/User DiscoveryT1082 - System Information Discovery
 
-MITRE ATT&CK Threat Matrix SummaryAttack PhaseTechnique NameMITRE IDArtifact / DetectionInitial AccessSystem Binary Proxy Execution: MshtaT1218.005Execution of update.exe.hta via mshta.exeExecutionCommand and Scripting Interpreter: PowerShellT1059.001Obfuscated Base64 PowerShell (-enc, -w Hidden)PersistenceScheduled Task/Job: Scheduled TaskT1053.005Task creation schtasks /Create /TN UpdaterCommand & ControlApplication Layer ProtocolT1071.001Traffic to 3.140.33.120:9001 via powershell.exeDiscoverySystem Information / User DiscoveryT1082 / T1033Execution of whoami /groups & systeminfo
+##  MITRE ATT&CK Threat Matrix Summary
 
-Remediation & Response PlaybookEndpoint Isolation: Immediately isolate Client2.BCS.local from the network to sever external C2 channels.Persistence Removal: Delete the malicious scheduled task using:DOSschtasks /delete /tn "Updater" /f
-Network Containment: Block target C2 IP 3.140.33.120 and associated egress ports (9001, 9003) on border firewalls/web proxies.Credential Revocation: Reset credentials and force session termination for user BCS\alice.Attack Surface Reduction: Restrict mshta.exe and powershell.exe execution policies using AppLocker or Windows Defender Application Control (WDAC).
+| Attack Phase | Technique Name | MITRE ID | Artifact / Detection |
+| :--- | :--- | :--- | :--- |
+| **Initial Access** | System Binary Proxy Execution: Mshta | `T1218.005` | Execution of `update.exe.hta` via `mshta.exe` |
+| **Execution** | Command and Scripting Interpreter: PowerShell | `T1059.001` | Obfuscated Base64 PowerShell (`-enc`, `-w Hidden`) |
+| **Persistence** | Scheduled Task/Job: Scheduled Task | `T1053.005` | Task creation `schtasks /Create /TN Updater` |
+| **Command & Control** | Application Layer Protocol | `T1071.001` | Traffic to `3.140.33.120:9001` via `powershell.exe` |
+| **Discovery** | System Information / User Discovery | `T1082` / `T1033` | Execution of `whoami /groups` & `systeminfo` |
+
+## Remediation & Response PlaybookEndpoint Isolation: 
+1-Immediately isolate Client2.BCS.local from the network to sever external C2 channels.
+2- Persistence Removal: Delete the malicious scheduled task using:
+DOS
+```
+schtasks /delete /tn "Updater" /f
+```
+
+3-Network Containment: Block target C2 IP 3.140.33.120 and associated egress ports (9001, 9003) on border firewalls/web proxies.
+4- Credential Revocation: Reset credentials and force session termination for user BCS\alice.
+5-Attack Surface Reduction: Restrict mshta.exe and powershell.exe execution policies using AppLocker or Windows Defender Application Control (WDAC).
