@@ -1,3 +1,4 @@
+
 # Enterprise Threat Detection & Incident Response with Splunk
 
 ##  Project Overview
@@ -35,6 +36,8 @@ index=* EventCode=1 (Image="*\\mshta.exe" OR CommandLine="*.hta*")
 | stats count by ComputerName, User, Image, CommandLine
 | sort - count
 ```
+<img width="1720" height="555" alt="Q1" src="https://github.com/user-attachments/assets/dc6ecb12-8495-4fbf-80ed-e8d04467fb1a" />
+
 Findings: The user BCS\alice executed a deceptive file named update.exe.hta located in the Downloads directory using mshta.exe.
 
 MITRE ATT&CK Mapping: T1218.005 - System Binary Proxy Execution: Mshta
@@ -48,6 +51,8 @@ index=* (EventCode=1 OR EventCode=4104) (CommandLine="*-enc*" OR CommandLine="*-
 | table _time, ComputerName, User, CommandLine
 | sort - _time
 ```
+<img width="1689" height="904" alt="Q2" src="https://github.com/user-attachments/assets/5e55dcae-1f49-4e3d-aaad-9d0246adb2c2" />
+
 Findings: Identified base64 obfuscated PowerShell execution (-noP -w Hidden -enc). Additionally, detected a persistent scheduled task creation via schtasks.exe named Updater set to execute elevated payloads upon system logon (/SC ONLOGON).
 
 MITRE ATT&CK Mapping:
@@ -65,6 +70,8 @@ index=* EventCode=3 DestinationIp != "10.*" AND DestinationIp != "192.168.*" AND
 | stats count by Image, DestinationIp, DestinationPort
 | sort - count
 ```
+<img width="1717" height="540" alt="Q3" src="https://github.com/user-attachments/assets/c48a01f8-1cbf-452f-bbb2-9b5b1f65141d" />
+
 Findings: High-frequency network connections were established from powershell.exe to external C2 IP 3.140.33.120 over non-standard destination ports 9001 (3,510 requests) and 9003 (1,328 requests).
 
 MITRE ATT&CK Mapping: T1071.001 - Application Layer Protocol: Web Protocols
@@ -78,6 +85,7 @@ index=* EventCode=1 (CommandLine="*whoami*" OR CommandLine="*systeminfo*" OR Com
 | stats count by User, CommandLine, ParentImage
 | sort - count
 ```
+<img width="1708" height="616" alt="Q4" src="https://github.com/user-attachments/assets/f070656d-7456-4eb7-9a5c-0fcb7f3df003" />
 
 Findings: The spawned powershell.exe process executed system enumeration commands including whoami /groups, whoami /user, and systeminfo.exe.MITRE ATT&CK Mapping:T1033 - System Owner/User DiscoveryT1082 - System Information Discovery
 
